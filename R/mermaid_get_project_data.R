@@ -35,7 +35,7 @@
 #' names(bleaching_obs)
 #' # [1] "colonies_bleached" "percent_cover"
 #' }
-mermaid_get_project_data <- function(project = mermaid_get_default_project(), method = c("fishbelt", "benthiclit", "benthicpit", "benthicpqt", "bleaching", "habitatcomplexity", "all"), data = c("observations", "sampleunits", "sampleevents", "all"), limit = NULL, token = mermaid_token()) {
+mermaid_get_project_data <- function(project = mermaid_get_default_project(), method = c("fishbelt", "benthiclit", "benthicpit", "benthicpqt", "bleaching", "habitatcomplexity", "all"), data = c("observations", "sampleunits", "sampleevents", "all"), limit = NULL, legacy = FALSE, token = mermaid_token()) {
   check_project_data_inputs(method, data)
 
   if (any(method == "all")) {
@@ -45,7 +45,7 @@ mermaid_get_project_data <- function(project = mermaid_get_default_project(), me
     data <- c("observations", "sampleunits", "sampleevents")
   }
 
-  endpoint <- construct_endpoint(method, data)
+  endpoint <- construct_endpoint(method, data, legacy)
 
   res <- purrr::map(endpoint, ~ get_project_endpoint(project, .x, limit, token))
 
@@ -84,7 +84,7 @@ check_project_data_inputs <- function(method, data) {
   }
 }
 
-construct_endpoint <- function(method, data) {
+construct_endpoint <- function(method, data, legacy) {
   method_data <- tidyr::expand_grid(method = method, data = data)
 
   method_data <- method_data %>%
@@ -109,8 +109,10 @@ construct_endpoint <- function(method, data) {
     ) %>%
     tidyr::separate_rows(method, data, sep = ",")
 
+  csv_endpoint <- ifelse(legacy, "", "/csv")
+
   method_data <- method_data %>%
-    dplyr::mutate(endpoint = paste0(.data$method, "/", .data$data))
+    dplyr::mutate(endpoint = paste0(.data$method, "/", .data$data, csv_endpoint))
 
   method_data_list <- method_data %>%
     split(method_data$method) %>%
@@ -141,6 +143,17 @@ project_data_columns <- list(
   `bleachingqcs/sampleunits` = c("project", "tags", "country", "site", "latitude", "longitude", "reef_type", "reef_zone", "reef_exposure", "tide", "current", "visibility", "relative_depth", "aca_geomorphic", "aca_benthic", "andrello_grav_nc", "andrello_sediment", "andrello_nutrient", "andrello_pop_count", "andrello_num_ports", "andrello_reef_value", "andrello_cumul_score", "beyer_score", "beyer_scorecn", "beyer_scorecy", "beyer_scorepfc", "beyer_scoreth", "beyer_scoretr", "management", "management_secondary", "management_est_year", "management_size", "management_parties", "management_compliance", "management_rules", "sample_date", "sample_time", "depth", "quadrat_size", "label", "count_total", "count_genera", "percent_normal", "percent_pale", "percent_bleached", "quadrat_count", "percent_hard_avg", "percent_soft_avg", "percent_algae_avg", "data_policy_bleachingqc", "project_notes", "site_notes", "management_notes", "sample_unit_notes", "sample_event_id", "sample_unit_ids", "id", "contact_link"),
   `bleachingqcs/sampleevents` = c("project", "tags", "country", "site", "latitude", "longitude", "reef_type", "reef_zone", "reef_exposure", "tide", "current", "visibility", "aca_geomorphic", "aca_benthic", "andrello_grav_nc", "andrello_sediment", "andrello_nutrient", "andrello_pop_count", "andrello_num_ports", "andrello_reef_value", "andrello_cumul_score", "beyer_score", "beyer_scorecn", "beyer_scorecy", "beyer_scorepfc", "beyer_scoreth", "beyer_scoretr", "management", "management_secondary", "management_est_year", "management_size", "management_parties", "management_compliance", "management_rules", "sample_date", "depth_avg", "quadrat_size_avg", "count_total_avg", "count_genera_avg", "percent_normal_avg", "percent_pale_avg", "percent_bleached_avg", "quadrat_count_avg", "percent_hard_avg_avg", "percent_soft_avg_avg", "percent_algae_avg_avg", "data_policy_bleachingqc", "project_notes", "site_notes", "management_notes", "id", "sample_unit_count", "contact_link")
 )
+
+project_data_columns_csv <- list(
+  "beltfishes/obstransectbeltfishes/csv" = project_data_columns[["beltfishes/obstransectbeltfishes"]],
+  "benthicpits/obstransectbenthicpits/csv" = project_data_columns[["benthicpits/obstransectbenthicpits"]],
+  "benthiclits/obstransectbenthiclits/csv" = project_data_columns[["benthiclits/obstransectbenthiclits"]],
+  "habitatcomplexities/obshabitatcomplexities/csv" = project_data_columns[["habitatcomplexities/obshabitatcomplexities"]],
+  "bleachingqcs/obscoloniesbleacheds/csv" = project_data_columns[["bleachingqcs/obscoloniesbleacheds"]],
+  "bleachingqcs/obsquadratbenthicpercents/csv" = project_data_columns[["bleachingqcs/obsquadratbenthicpercents"]]
+)
+
+project_data_columns <- append(project_data_columns, project_data_columns_csv)
 
 # For testing columns, after df-cols have been expanded
 project_data_df_columns_list <- list(
