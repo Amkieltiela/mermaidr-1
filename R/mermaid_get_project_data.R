@@ -146,21 +146,14 @@ project_data_columns <- list(
   `habitatcomplexities/obshabitatcomplexities` = c(common_cols[["obs/su"]], "transect_number", "transect_length", "label", "interval_size", "observers", "interval", "score", "score_name", "data_policy_habitatcomplexity", "project_notes", "site_notes", "management_notes", "id", "sample_unit_id", "sample_event_id", "contact_link"),
   `habitatcomplexities/sampleunits` = c(common_cols[["obs/su"]], "transect_number", "transect_length", "label", "observers", "score_avg", "data_policy_habitatcomplexity", common_cols[["su_closing"]]),
   `habitatcomplexities/sampleevents` = c(common_cols[["se"]], "depth_avg", "score_avg_avg", "data_policy_habitatcomplexity", common_cols[["se_closing"]]),
-  `bleachingqcs/obscoloniesbleacheds` = c(common_cols[["obs/su"]], "quadrat_size", "label", "observers", "benthic_attribute", "growth_form", "count_normal", "count_pale", "count_20", "count_50", "count_80", "count_100", "count_dead", "data_policy_bleachingqc", common_cols[["obs_closing"]]),
-  `bleachingqcs/obsquadratbenthicpercents` = c(common_cols[["obs/su"]], "quadrat_size", "label", "observers", "quadrat_number", "percent_hard", "percent_soft", "percent_algae", "data_policy_bleachingqc", common_cols[["obs_closing"]]),
+  `bleachingqcs/obscoloniesbleacheds` = c(common_cols[["obs/su"]][!common_cols[["obs/su"]] == "reef_slope"], "quadrat_size", "label", "observers", "benthic_attribute", "growth_form", "count_normal", "count_pale", "count_20", "count_50", "count_80", "count_100", "count_dead", "data_policy_bleachingqc", common_cols[["obs_closing"]]),
+  `bleachingqcs/obsquadratbenthicpercents` = c(common_cols[["obs/su"]][!common_cols[["obs/su"]] == "reef_slope"], "quadrat_size", "label", "observers", "quadrat_number", "percent_hard", "percent_soft", "percent_algae", "data_policy_bleachingqc", common_cols[["obs_closing"]]),
   `bleachingqcs/sampleunits` = c(common_cols[["obs/su"]], "quadrat_size", "label", "count_total", "count_genera", "percent_normal", "percent_pale", "percent_bleached", "quadrat_count", "percent_hard_avg", "percent_soft_avg", "percent_algae_avg", "data_policy_bleachingqc", common_cols[["su_closing"]]),
   `bleachingqcs/sampleevents` = c(common_cols[["se"]], "quadrat_size_avg", "count_total_avg", "count_genera_avg", "percent_normal_avg", "percent_pale_avg", "percent_bleached_avg", "quadrat_count_avg", "percent_hard_avg_avg", "percent_soft_avg_avg", "percent_algae_avg_avg", "data_policy_bleachingqc", common_cols[["se_closing"]])
 )
 
-project_data_columns_csv <- list(
-  "beltfishes/obstransectbeltfishes/csv" = project_data_columns[["beltfishes/obstransectbeltfishes"]],
-  "beltfishes/sampleunits/csv" = project_data_columns[["beltfishes/sampleunits"]],
-  "benthicpits/obstransectbenthicpits/csv" = project_data_columns[["benthicpits/obstransectbenthicpits"]],
-  "benthiclits/obstransectbenthiclits/csv" = project_data_columns[["benthiclits/obstransectbenthiclits"]],
-  "habitatcomplexities/obshabitatcomplexities/csv" = project_data_columns[["habitatcomplexities/obshabitatcomplexities"]],
-  "bleachingqcs/obscoloniesbleacheds/csv" = project_data_columns[["bleachingqcs/obscoloniesbleacheds"]],
-  "bleachingqcs/obsquadratbenthicpercents/csv" = project_data_columns[["bleachingqcs/obsquadratbenthicpercents"]]
-)
+project_data_columns_csv <- project_data_columns
+names(project_data_columns_csv) <- paste0(names(project_data_columns), "/csv")
 
 project_data_columns_csv <- project_data_columns_csv %>%
   purrr::map(~ c(.x, "sample_date_year", "sample_date_month", "sample_date_day"))
