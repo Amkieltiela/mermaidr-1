@@ -934,7 +934,7 @@ test_that("Manual extraction of ACA covariates (choosing value with highest area
 
   project_id <- "2d6cee25-c0ff-4f6f-a8cd-667d3f2b914b"
 
-  sus <- mermaid_get_project_data(project_id, "fishbelt", "sampleunits")
+  sus <- mermaid_get_project_data_legacy(project_id, "fishbelt", "sampleunits")
 
   # Hit CSV endpoint
   path <- glue::glue("https://dev-api.datamermaid.org/v1/projects/{project_id}/beltfishes/sampleunits/csv/?limit=5000")
