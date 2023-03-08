@@ -10,7 +10,6 @@ mermaid_get_project_data(
     "habitatcomplexity", "all"),
   data = c("observations", "sampleunits", "sampleevents", "all"),
   limit = NULL,
-  legacy = FALSE,
   token = mermaid_token()
 )
 }
