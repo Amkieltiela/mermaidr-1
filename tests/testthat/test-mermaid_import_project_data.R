@@ -5,19 +5,19 @@ test_that("mermaid_import_project_data errors if data is not a data frame or pat
 
   # Valid file, but not CSV
   expect_error(
-    mermaid_import_project_data(system.file("extdata/mermaid_ingest.json", package = "mermaidr")),
+    mermaid_import_project_data(system.file("extdata/mermaid_ingest.json", package = "mermaidr"), "p"),
     "path to a CSV"
   )
 
   # Invalid file
   expect_error(
-    mermaid_import_project_data(tempfile()),
+    mermaid_import_project_data(tempfile(), "p"),
     "path to a CSV"
   )
 
   # List
   expect_error(
-    mermaid_import_project_data(list()),
+    mermaid_import_project_data(list(), "p"),
     "path to a CSV"
   )
 })
@@ -28,7 +28,7 @@ test_that("mermaid_import_project_data errors if method doesn't match", {
   skip_on_cran()
 
   expect_error(
-    mermaid_import_project_data(mtcars, method = "nope"),
+    mermaid_import_project_data(mtcars, project = "p", method = "nope"),
     "must be one of"
   )
 })
