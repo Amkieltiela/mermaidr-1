@@ -7,7 +7,7 @@ output: html_document
 
 Do you have a lot of existing data and are just starting to use MERMAID? You might be wondering on how to import those data into MERMAID. You can import (ingest) your legacy data into MERMAID by using the mermaidr package. More info on the ingestion workflow with mermaidr can be seen on the [ingestion documentation](https://datamermaid.org/documentation/ingesting-legacy-data-using-r-studio).
 
-Here we provide an example on how to import your fish data that uses the **fish belt method** into MERMAID using mermaidr. Please note that you need to **prepare your project in the app first** before starting this process. Detail on how to set a new project can be seen [here](https://datamermaid.org/documentation/setting-up-a-new-project). For this example, we have already prepared a project in the MERMAID app named **MERMAID reef survey**.
+Here we provide an example on how to import your fish data that uses the **fish belt method** into MERMAID using mermaidr. Please note that you need to **prepare your project in the app first** before starting this process. Detail on how to set a new project can be seen [here](https://datamermaid.org/documentation/setting-up-a-new-project). For this example, we have already prepared a project in the MERMAID app named **MERMAID reef survey**. To help you follow this example, we have also prepared a video using the same example that you can acceess through this [link](https://youtu.be/bgmz0vhg2QI).
 
 The steps for importing legacy fish belt data are:
 
